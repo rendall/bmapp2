@@ -1,0 +1,15 @@
+{
+  "name": "bmapp2",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^10.14.7",
+    "dotenv": "^8.0.0",
+    "typescript": "^3.5.3"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.31",
+    "@types/dotenv": "^6.1.1"
+  }
+}

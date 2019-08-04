@@ -1,0 +1,5 @@
+.env
+/.functions/
+/app/
+/common/
+/node_modules/
