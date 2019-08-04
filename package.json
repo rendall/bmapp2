@@ -10,7 +10,10 @@
     "@types/aws-lambda": "^8.10.31",
     "@types/dotenv": "^6.1.1",
     "@types/node": "^10.14.7",
+    "rimraf": "^2.6.3",
     "typescript": "^3.5.3"
   },
-  "scripts": { "build":"tsc" }
+  "scripts": {
+    "build": "rimraf app && mkdir app && tsc"
+  }
 }
