@@ -61,8 +61,3 @@ typings/
 .next
 
 # BMapp2
-
-/.functions/
-/app/
-/common/
-/node_modules/
