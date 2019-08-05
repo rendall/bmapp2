@@ -21,10 +21,11 @@ exports.handler = ( event: APIGatewayEvent, context: Context, callback: Callback
     )
     .catch((err: DataRetrievalError) =>
       callback(
-        {
-          message: err.statusMessage || "Unknown error",
-          name: `${err.statusCode}` || "500"
-        },
+        // {
+        //   message: err.statusMessage || "Unknown error",
+        //   name: `${err.statusCode}` || "500"
+        // },
+        null,
         { statusCode: err.statusCode, body: err.statusMessage }
       )
     );
