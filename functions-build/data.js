@@ -15,8 +15,10 @@ exports.handler = (event, context, callback) => {
         statusCode: 200,
         body
     }))
-        .catch((err) => callback({
-        message: err.statusMessage || "Unknown error",
-        name: `${err.statusCode}` || "500"
-    }, { statusCode: err.statusCode, body: err.statusMessage }));
+        .catch((err) => callback(
+    // {
+    //   message: err.statusMessage || "Unknown error",
+    //   name: `${err.statusCode}` || "500"
+    // },
+    null, { statusCode: err.statusCode, body: err.statusMessage }));
 };
