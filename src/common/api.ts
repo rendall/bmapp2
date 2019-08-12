@@ -15,12 +15,20 @@ export type DataRetrievalError = {
 
 const dataPromise = (path: string) => (year: number | string) =>
   new Promise((resolve, reject) => {
+
+    console.info(`fetching ${path}`);
+
     http.get(
       `${BM_URL}/${path}?year=${year}`,
       basicAuth,
       (res: IncomingMessage) => {
+        console.info(`receiving ${path}`);
+
         const { statusCode, statusMessage } = res;
-        res.on("error", error => reject({ statusCode, statusMessage, error }));
+
+        console.info({ statusCode, statusMessage });
+
+        res.on("error", error => reject(JSON.stringify({ statusCode, statusMessage, error })));
         let dump = "";
         res.on("data", data => (dump += data));
         res.on("end", () => resolve(JSON.parse(dump)));

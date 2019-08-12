@@ -15,6 +15,7 @@
     "typescript": "^3.5.3"
   },
   "scripts": {
-    "build": "rimraf app && rimraf common && rimraf functions && tsc && netlify-lambda build functions-build"
+    "build:clean" : "rimraf app && rimraf common && rimraf functions",
+    "build": "npm run build:clean && tsc && netlify-lambda build functions-build"
   }
 }

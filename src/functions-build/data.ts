@@ -6,18 +6,20 @@ import { getData, DataRetrievalError } from "../common/api";
  * 
  * @param year optional querystring (eg. ?year=2017) defaults to current year
  */
-exports.handler = ( event: APIGatewayEvent, context: Context, callback: Callback ):void => {
+exports.handler = (event: APIGatewayEvent, context: Context, callback: Callback): void => {
   const year =
     event.queryStringParameters && event.queryStringParameters["year"]
       ? event.queryStringParameters["year"]
       : new Date().getFullYear();
 
   getData(year)
-    .then(body =>
+    .then(body => {
+      console.info("callback call");
       callback(null, {
         statusCode: 200,
         body
       })
+    }
     )
     .catch((err: DataRetrievalError) =>
       callback(
