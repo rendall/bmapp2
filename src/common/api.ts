@@ -8,9 +8,9 @@ const BM_URL = process.env.BM_URL;
 const basicAuth = { auth: `${API_KEY}:` };
 
 export type DataRetrievalError = {
- statusCode: number | undefined;
- statusMessage: string | undefined;
- error : Error;
+  statusCode: number | undefined;
+  statusMessage: string | undefined;
+  error : Error;
 }
 
 const dataPromise = (path: string) => (year: number | string) =>
@@ -27,7 +27,10 @@ const dataPromise = (path: string) => (year: number | string) =>
 
         console.info({ statusCode, statusMessage });
 
-        res.on("error", error => reject(JSON.stringify({ statusCode, statusMessage, error })));
+        res.on("error", (error) => { 
+          res.resume()
+          reject(JSON.stringify({ statusCode, statusMessage, error }))
+        })
         let dump = "";
         res.on("data", data => (dump += data));
         res.on("end", () => resolve(JSON.parse(dump)));
