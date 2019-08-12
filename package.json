@@ -15,6 +15,6 @@
     "typescript": "^3.5.3"
   },
   "scripts": {
-    "build": "rimraf app && mkdir app && tsc --build tsconfig.json"
+    "build": "rimraf app && rimraf common && rimraf functions && tsc && netlify-lambda functions-build"
   }
 }
