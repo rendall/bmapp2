@@ -15,11 +15,10 @@ export type DataRetrievalError = {
 
 const dataPromise = (path: string) => (year: number | string) =>
   new Promise((resolve, reject) => {
-
-    console.info(`fetching ${path}`);
-
+    const ApiEndpoint = `${BM_URL}/${path}?year=${year}`
+    console.info("fetching", {path, ApiEndpoint, basicAuth, API_KEY});
     http.get(
-      `${BM_URL}/${path}?year=${year}`,
+      ApiEndpoint,
       basicAuth,
       (res: IncomingMessage) => {
         console.info(`receiving ${path}`);
