@@ -14,7 +14,6 @@ exports.handler = (event: APIGatewayEvent, context: Context, callback: Callback)
 
   getData(year)
     .then(body => {
-      console.info("callback call");
       callback(null, {
         statusCode: 200,
         body
