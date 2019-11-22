@@ -48,6 +48,7 @@ const eventPromise = dataPromise("event")
  */
 export const getData = (year: number | string): Promise<string> =>
   Promise.all([campPromise(year), artPromise(year), eventPromise(year)])
+    .then(v => { console.info("retrieved all data, creating object"); return v;})
     .then(v => ({
       camps: v[0],
       art: v[1],
