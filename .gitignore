@@ -63,5 +63,5 @@ typings/
 # BMapp2
 /common
 /functions
-/functions-build
+/functions-src
 /app
