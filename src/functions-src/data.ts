@@ -13,21 +13,8 @@ exports.handler = (event: APIGatewayEvent, context: Context, callback: Callback)
       : new Date().getFullYear();
 
   getData(year)
-    .then(body => {
-      callback(null, {
-        statusCode: 200,
-        body
-      })
-    }
-    )
-    .catch((err: DataRetrievalError) =>
-      callback(
-        // {
-        //   message: err.statusMessage || "Unknown error",
-        //   name: `${err.statusCode}` || "500"
-        // },
-        null,
-        { statusCode: err.statusCode, body: err.statusMessage }
-      )
-    );
+    .then(body => { callback(null, { statusCode: 200, body }) })
+    .catch((err: DataRetrievalError) => {
+      callback(null, { statusCode: err.statusCode, body: err.statusMessage });
+    });
 };

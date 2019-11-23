@@ -1,11 +1,12 @@
 import * as dotenv from "dotenv"
 import * as http from "https"
-import { IncomingMessage } from "http"
+import { IncomingMessage, ClientRequest } from "http"
 dotenv.config()
 
 const API_KEY = process.env.API_KEY
 const BM_URL = process.env.BM_URL
 const basicAuth = { auth: `${API_KEY}:` }
+const TIMEOUT_MS = 2000;
 
 export type DataRetrievalError = {
   statusCode: number | undefined
@@ -16,10 +17,10 @@ export type DataRetrievalError = {
 const dataPromise = (path: string) => (year: number | string) =>
   new Promise((resolve, reject) => {
     const ApiEndpoint = `${BM_URL}/${path}?year=${year}`
-    console.info("fetching", { path, ApiEndpoint, basicAuth, API_KEY })
-    http.get(
+    const requestOptions: http.RequestOptions = { ...basicAuth }
+    const request: ClientRequest = http.get(
       ApiEndpoint,
-      basicAuth,
+      requestOptions,
       (res: IncomingMessage) => {
         console.info(`receiving ${path}`)
 
@@ -29,14 +30,24 @@ const dataPromise = (path: string) => (year: number | string) =>
 
         res.on("error", (error) => {
           res.resume()
-          reject(JSON.stringify({ statusCode, statusMessage, error }))
+          reject({ statusCode, statusMessage, error })
         })
         let dump = ""
         res.on("data", data => (dump += data))
         res.on("end", () => resolve(JSON.parse(dump)))
       }
     )
-  })
+
+    const onTimeout = () => request.abort();
+
+    request.addListener("error", () => {
+      const statusCode = 508
+      const statusMessage = "Burning Man API timeout"
+      reject({ statusCode, statusMessage })
+    }); // request.abort() throws a fatal error without capturing the "error" event
+
+    request.setTimeout(TIMEOUT_MS, onTimeout)
+  }).catch((err) => { throw err })
 
 const campPromise = dataPromise("camp")
 const artPromise = dataPromise("art")
@@ -48,7 +59,7 @@ const eventPromise = dataPromise("event")
  */
 export const getData = (year: number | string): Promise<string> =>
   Promise.all([campPromise(year), artPromise(year), eventPromise(year)])
-    .then(v => { console.info("retrieved all data, creating object"); return v;})
+    .then(v => { console.info("retrieved all data, creating object"); return v; })
     .then(v => ({
       camps: v[0],
       art: v[1],
@@ -56,3 +67,4 @@ export const getData = (year: number | string): Promise<string> =>
       timestamp: new Date().valueOf()
     }))
     .then(data => JSON.stringify(data))
+    .catch(err => { throw err })
