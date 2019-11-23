@@ -6,7 +6,7 @@ This is BMapp, the app to navigate Burning Man.
 
 ## development
 
-This is served via Netlify and has two components, the backend and the frontend
+This is served via Netlify and has two components, the backend and the frontend. Backend development is current.
 
 ### installation
 
@@ -22,13 +22,14 @@ This is served via Netlify and has two components, the backend and the frontend
 
 ### structure
 
-- `./src` contains all source. Develop here.
+- `./src` contains all source. Develop here. It more or less mirrors its parent in structure
 - `./functions-src` contains intermediate compiled Netlify serverless functions
 - `./functions` contains compiled Netlify serverless functions
-  - endpoint is served from `./.netlify/functions/file-name`
+- endpoint is served from `./.netlify/functions/file-name`
 
 ### pipeline
 
+Develop using the `.ts` files in `./src/`. After building, issue command `npm run build`
 Push to Github master, application shows up at <https://bmapp2.netlify.com/>
 
 ## Known bugs
