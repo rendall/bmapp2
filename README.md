@@ -30,3 +30,10 @@ This is served via Netlify and has two components, the backend and the frontend
 ### pipeline
 
 Push to Github master, application shows up at <https://bmapp2.netlify.com/>
+
+## Known bugs
+
+The request and response to the Burning Man API works as expected locally, but
+fails silently when uploaded and built in Netlify, returning a status 200 OK,
+but no data. The line before `http.get` in `api.js` executes, but nothing
+following.
