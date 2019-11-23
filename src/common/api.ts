@@ -14,10 +14,12 @@ export type DataRetrievalError = {
   error: Error
 }
 
-const dataPromise = (path: string) => (year: number | string) =>
-  new Promise((resolve, reject) => {
+const dataPromise = (path: string) => (year: number | string) => {
+  console.log(`creating dataPromise(${path}, ${year})`);
+  return new Promise((resolve, reject) => {
     const ApiEndpoint = `${BM_URL}/${path}?year=${year}`
     const requestOptions: http.RequestOptions = { ...basicAuth }
+    console.log(`creating ClientRequest (${path}, ${year})`);
     const request: ClientRequest = http.get(
       ApiEndpoint,
       requestOptions,
@@ -48,7 +50,7 @@ const dataPromise = (path: string) => (year: number | string) =>
 
     request.setTimeout(TIMEOUT_MS, onTimeout)
   }).catch((err) => { throw err })
-
+}
 const campPromise = dataPromise("camp")
 const artPromise = dataPromise("art")
 const eventPromise = dataPromise("event")
@@ -57,8 +59,9 @@ const eventPromise = dataPromise("event")
  * data dump for <year> as a json object of the form 
  * { camps:[...], art:[...], events:[...], timestamp:integer }
  */
-export const getData = (year: number | string): Promise<string> =>
-  Promise.all([campPromise(year), artPromise(year), eventPromise(year)])
+export const getData = (year: number | string): Promise<string> => {
+  console.log(`getData(${year})`);
+  return Promise.all([campPromise(year), artPromise(year), eventPromise(year)])
     .then(v => { console.info("retrieved all data, creating object"); return v; })
     .then(v => ({
       camps: v[0],
@@ -68,3 +71,4 @@ export const getData = (year: number | string): Promise<string> =>
     }))
     .then(data => JSON.stringify(data))
     .catch(err => { throw err })
+}
