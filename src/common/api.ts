@@ -40,6 +40,7 @@ const dataPromise = (path: string) => (year: number | string) => {
       }
     )
 
+    console.log(`ClientRequest created (${path}, ${year})`);
     const onTimeout = () => request.abort();
 
     request.addListener("error", () => {
@@ -48,7 +49,10 @@ const dataPromise = (path: string) => (year: number | string) => {
       reject({ statusCode, statusMessage })
     }); // request.abort() throws a fatal error without capturing the "error" event
 
-    request.setTimeout(TIMEOUT_MS, onTimeout)
+    request.setTimeout(TIMEOUT_MS, onTimeout) 
+
+    console.log(`timeout added to request (${path}, ${year})`);
+
   }).catch((err) => { throw err })
 }
 const campPromise = dataPromise("camp")
