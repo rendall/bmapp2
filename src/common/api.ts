@@ -4,7 +4,7 @@ import { IncomingMessage, ClientRequest } from "http"
 dotenv.config()
 
 const API_KEY = process.env.API_KEY
-const BM_URL:string = process.env.BM_URL!
+const BM_URL: string = process.env.BM_URL!
 const basicAuth = { auth: `${API_KEY}:` }
 const TIMEOUT_MS = 2000;
 
@@ -41,23 +41,29 @@ const dataPromise = (path: string) => (year: number | string) => {
     // )
 
 
-    const request = http.get(ApiEndpoint, basicAuth, (res: IncomingMessage) => {
-      console.log({res});
+    try {
 
-    })
+      const request = http.get(ApiEndpoint, basicAuth, (res: IncomingMessage) => {
+        console.log({ res });
 
-    console.log(`ClientRequest created (${path}, ${year})`);
-    const onTimeout = () => request.abort();
+      })
 
-    request.addListener("error", () => {
-      const statusCode = 508
-      const statusMessage = "Burning Man API timeout"
-      reject({ statusCode, statusMessage })
-    }); // request.abort() throws a fatal error without capturing the "error" event
+      console.log(`ClientRequest created (${path}, ${year})`);
+      const onTimeout = () => request.abort();
 
-    request.setTimeout(TIMEOUT_MS, onTimeout)
+      request.addListener("error", () => {
+        const statusCode = 508
+        const statusMessage = "Burning Man API timeout"
+        reject({ statusCode, statusMessage })
+      }); // request.abort() throws a fatal error without capturing the "error" event
 
-    console.log(`timeout added to request (${path}, ${year})`);
+      request.setTimeout(TIMEOUT_MS, onTimeout)
+
+      console.log(`timeout added to request (${path}, ${year})`);
+    } catch (error) {
+      console.error("request", { error })
+
+    }
 
   }).catch((err) => { throw err })
 }
