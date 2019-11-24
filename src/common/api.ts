@@ -4,7 +4,7 @@ import { IncomingMessage, ClientRequest } from "http"
 dotenv.config()
 
 const API_KEY = process.env.API_KEY
-const BM_URL = process.env.BM_URL
+const BM_URL:string = process.env.BM_URL!
 const basicAuth = { auth: `${API_KEY}:` }
 const TIMEOUT_MS = 2000;
 
@@ -41,7 +41,7 @@ const dataPromise = (path: string) => (year: number | string) => {
     // )
 
 
-    const request = http.get("https://rendall.tv", (res: IncomingMessage) => {
+    const request = http.get(BM_URL, (res: IncomingMessage) => {
       console.log({res});
 
     })
