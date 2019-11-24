@@ -41,7 +41,7 @@ const dataPromise = (path: string) => (year: number | string) => {
     // )
 
 
-    const request = http.get(BM_URL, (res: IncomingMessage) => {
+    const request = http.get(ApiEndpoint, (res: IncomingMessage) => {
       console.log({res});
 
     })
