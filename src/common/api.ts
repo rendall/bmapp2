@@ -41,7 +41,7 @@ const dataPromise = (path: string) => (year: number | string) => {
     // )
 
 
-    const request = http.get(ApiEndpoint, (res: IncomingMessage) => {
+    const request = http.get(ApiEndpoint, basicAuth, (res: IncomingMessage) => {
       console.log({res});
 
     })
