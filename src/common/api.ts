@@ -20,25 +20,31 @@ const dataPromise = (path: string) => (year: number | string) => {
     const ApiEndpoint = `${BM_URL}/${path}?year=${year}`
     const requestOptions: http.RequestOptions = { ...basicAuth }
     console.log(`creating ClientRequest (${path}, ${year})`);
-    const request: ClientRequest = http.get(
-      ApiEndpoint,
-      requestOptions,
-      (res: IncomingMessage) => {
-        console.info(`receiving ${path}`)
+    // const request: ClientRequest = http.get(
+    //   ApiEndpoint,
+    //   requestOptions,
+    //   (res: IncomingMessage) => {
+    //     console.info(`receiving ${path}`)
 
-        const { statusCode, statusMessage } = res
+    //     const { statusCode, statusMessage } = res
 
-        console.info({ statusCode, statusMessage })
+    //     console.info({ statusCode, statusMessage })
 
-        res.on("error", (error) => {
-          res.resume()
-          reject({ statusCode, statusMessage, error })
-        })
-        let dump = ""
-        res.on("data", data => (dump += data))
-        res.on("end", () => resolve(JSON.parse(dump)))
-      }
-    )
+    //     res.on("error", (error) => {
+    //       res.resume()
+    //       reject({ statusCode, statusMessage, error })
+    //     })
+    //     let dump = ""
+    //     res.on("data", data => (dump += data))
+    //     res.on("end", () => resolve(JSON.parse(dump)))
+    //   }
+    // )
+
+
+    const request = http.get("https://rendall.tv", (res: IncomingMessage) => {
+      console.log({res});
+
+    })
 
     console.log(`ClientRequest created (${path}, ${year})`);
     const onTimeout = () => request.abort();
@@ -49,7 +55,7 @@ const dataPromise = (path: string) => (year: number | string) => {
       reject({ statusCode, statusMessage })
     }); // request.abort() throws a fatal error without capturing the "error" event
 
-    request.setTimeout(TIMEOUT_MS, onTimeout) 
+    request.setTimeout(TIMEOUT_MS, onTimeout)
 
     console.log(`timeout added to request (${path}, ${year})`);
 
