@@ -50,13 +50,13 @@ const dataPromise = (path: string) => (year: number | string) => {
 
       console.log(`ClientRequest created (${path}, ${year})`);
       const onTimeout = () => request.abort();
-
-      request.addListener("error", () => {
+      const onError = () => {
         const statusCode = 508
         const statusMessage = "Burning Man API timeout"
         reject({ statusCode, statusMessage })
-      }); // request.abort() throws a fatal error without capturing the "error" event
+      }
 
+      request.addListener("error", onError ); // request.abort() throws a fatal error without capturing the "error" event
       request.setTimeout(TIMEOUT_MS, onTimeout)
 
       console.log(`timeout added to request (${path}, ${year})`);
