@@ -43,12 +43,11 @@ const dataPromise = (path: string) => (year: number | string) => {
 
     try {
 
-      const request = http.get(ApiEndpoint, basicAuth, (res: IncomingMessage) => {
+      console.log(`ClientRequest created (${path}, ${year})`);
+      const request = http.get(ApiEndpoint, (res: IncomingMessage) => {
         console.log({ res });
-
       })
 
-      console.log(`ClientRequest created (${path}, ${year})`);
       const onTimeout = () => request.abort();
       const onError = () => {
         const statusCode = 508
