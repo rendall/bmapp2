@@ -4,8 +4,9 @@ import { IncomingMessage, ClientRequest } from "http"
 dotenv.config()
 
 const API_KEY = process.env.API_KEY
-const BM_URL: string = process.env.BM_URL!
-const basicAuth = { auth: `${API_KEY}:` }
+const BM_URL = process.env.BM_URL
+const auth = `${API_KEY}:`
+const hostname = "api.burningman.org" // BM_URL
 const TIMEOUT_MS = 2000;
 
 export type DataRetrievalError = {
@@ -14,55 +15,45 @@ export type DataRetrievalError = {
   error: Error
 }
 
-const dataPromise = (path: string) => (year: number | string) => {
-  console.log(`creating dataPromise(${path}, ${year})`);
+const dataPromise = (endpoint: string) => (year: number | string) => {
+  console.log(`creating dataPromise(${endpoint}, ${year})`);
   return new Promise((resolve, reject) => {
-    const ApiEndpoint = `${BM_URL}/${path}?year=${year}`
-    const requestOptions: http.RequestOptions = { ...basicAuth }
-    console.log(`creating ClientRequest (${path}, ${year})`);
-    // const request: ClientRequest = http.get(
-    //   ApiEndpoint,
-    //   requestOptions,
-    //   (res: IncomingMessage) => {
-    //     console.info(`receiving ${path}`)
+    const ApiEndpoint = `${BM_URL}/${endpoint}?year=${year}`
+    const path = `/api/v1/${endpoint}?year=${year}`
+    const requestOptions: http.RequestOptions = { hostname, path, auth }
+    console.log(`creating ClientRequest (${endpoint}, ${year})`, {requestOptions});
+    const request: ClientRequest = http.get(
+      // ApiEndpoint,
+      requestOptions,
+      (res: IncomingMessage) => {
+        console.info(`receiving ${endpoint}`)
 
-    //     const { statusCode, statusMessage } = res
+        const { statusCode, statusMessage } = res
 
-    //     console.info({ statusCode, statusMessage })
+        console.info({ statusCode, statusMessage })
 
-    //     res.on("error", (error) => {
-    //       res.resume()
-    //       reject({ statusCode, statusMessage, error })
-    //     })
-    //     let dump = ""
-    //     res.on("data", data => (dump += data))
-    //     res.on("end", () => resolve(JSON.parse(dump)))
-    //   }
-    // )
-
-
-    try {
-
-      console.log(`ClientRequest created (${path}, ${year})`);
-      const request = http.get(ApiEndpoint, (res: IncomingMessage) => {
-        console.log({ res });
-      })
-
-      const onTimeout = () => request.abort();
-      const onError = () => {
-        const statusCode = 508
-        const statusMessage = "Burning Man API timeout"
-        reject({ statusCode, statusMessage })
+        res.on("error", (error) => {
+          res.resume()
+          reject({ statusCode, statusMessage, error })
+        })
+        let dump = ""
+        res.on("data", data => (dump += data))
+        res.on("end", () => resolve(JSON.parse(dump)))
       }
+    )
 
-      request.addListener("error", onError ); // request.abort() throws a fatal error without capturing the "error" event
-      request.setTimeout(TIMEOUT_MS, onTimeout)
+    console.log(`ClientRequest created (${endpoint}, ${year})`);
+    const onTimeout = () => request.abort();
 
-      console.log(`timeout added to request (${path}, ${year})`);
-    } catch (error) {
-      console.error("request", { error })
+    // request.addListener("error", () => {
+    //   const statusCode = 508
+    //   const statusMessage = "Burning Man API timeout"
+    //   reject({ statusCode, statusMessage })
+    // }); // request.abort() throws a fatal error without capturing the "error" event
 
-    }
+    // request.setTimeout(TIMEOUT_MS, onTimeout) 
+
+    console.log(`timeout added to request (${endpoint}, ${year})`);
 
   }).catch((err) => { throw err })
 }
