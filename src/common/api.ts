@@ -1,13 +1,16 @@
 import * as dotenv from "dotenv"
 import * as http from "https"
 import { IncomingMessage, ClientRequest } from "http"
-dotenv.config()
 
+dotenv.config()
 const API_KEY = process.env.API_KEY
-const BM_URL = process.env.BM_URL
+const API_HOST = process.env.API_HOST
+const API_PATH = process.env.API_PATH
+
+const TIMEOUT_MS = 5000
+const TIMEOUT_ERROR_STATUS_CODE = 504 // As a const, to clarify meaning of '504'
+
 const auth = `${API_KEY}:`
-const hostname = "api.burningman.org" // BM_URL
-const TIMEOUT_MS = 2000;
 
 export type DataRetrievalError = {
   statusCode: number | undefined
@@ -15,66 +18,66 @@ export type DataRetrievalError = {
   error: Error
 }
 
-const dataPromise = (endpoint: string) => (year: number | string) => {
-  console.log(`creating dataPromise(${endpoint}, ${year})`);
+const apiPromise = (endpoint: string) => (year: number | string) => {
   return new Promise((resolve, reject) => {
-    const ApiEndpoint = `${BM_URL}/${endpoint}?year=${year}`
-    const path = `/api/v1/${endpoint}?year=${year}`
+    const hostname = `${API_HOST}`
+    const path = `${API_PATH}/${endpoint}?year=${year}`
     const requestOptions: http.RequestOptions = { hostname, path, auth }
-    console.log(`creating ClientRequest (${endpoint}, ${year})`, {requestOptions});
-    const request: ClientRequest = http.get(
-      // ApiEndpoint,
-      requestOptions,
-      (res: IncomingMessage) => {
-        console.info(`receiving ${endpoint}`)
 
-        const { statusCode, statusMessage } = res
+    const onResponse = (res: IncomingMessage) => {
+      console.info(`Received response from ${endpoint}`)
+      const { statusCode, statusMessage } = res
+      res.on("error", (error) => {
+        console.error(`${endpoint} error`, error)
+        res.resume()
+        reject({ statusCode, statusMessage })
+      })
+      let dump = ""
+      res.on("data", data => (dump += data))
+      res.on("end", () => resolve(JSON.parse(dump)))
+    }
 
-        console.info({ statusCode, statusMessage })
-
-        res.on("error", (error) => {
-          res.resume()
-          reject({ statusCode, statusMessage, error })
-        })
-        let dump = ""
-        res.on("data", data => (dump += data))
-        res.on("end", () => resolve(JSON.parse(dump)))
+    const request: ClientRequest = http.get(requestOptions, onResponse)
+    console.info(`Sent request for ${endpoint}`)
+    const onTimeout = () => request.abort()
+    const onRequestError = (error: Error) => {
+      switch (error.message) {
+        case "socket hang up":
+          if (request.aborted) {
+            reject({ statusCode: TIMEOUT_ERROR_STATUS_CODE, statusMessage: "Burning Man API timeout" })
+            break;
+          }
+        default:
+          console.error(error)
+          reject({ statusCode: 500, statusMessage: `${error.name}` })
+          break;
       }
-    )
+    }
 
-    console.log(`ClientRequest created (${endpoint}, ${year})`);
-    const onTimeout = () => request.abort();
-
-    // request.addListener("error", () => {
-    //   const statusCode = 508
-    //   const statusMessage = "Burning Man API timeout"
-    //   reject({ statusCode, statusMessage })
-    // }); // request.abort() throws a fatal error without capturing the "error" event
-
-    // request.setTimeout(TIMEOUT_MS, onTimeout) 
-
-    console.log(`timeout added to request (${endpoint}, ${year})`);
+    request.addListener("error", onRequestError);
+    request.setTimeout(TIMEOUT_MS, onTimeout)
 
   }).catch((err) => { throw err })
 }
-const campPromise = dataPromise("camp")
-const artPromise = dataPromise("art")
-const eventPromise = dataPromise("event")
+const campPromise = apiPromise("camp")
+const artPromise = apiPromise("art")
+const eventPromise = apiPromise("event")
 
 /** getData(year) returns a promise that yields the entire Burning Man 
  * data dump for <year> as a json object of the form 
  * { camps:[...], art:[...], events:[...], timestamp:integer }
  */
 export const getData = (year: number | string): Promise<string> => {
-  console.log(`getData(${year})`);
+  console.info(`Getting data for ${year}`)
   return Promise.all([campPromise(year), artPromise(year), eventPromise(year)])
-    .then(v => { console.info("retrieved all data, creating object"); return v; })
+    .then(v => { console.info("Retrieved all data"); return v; })
     .then(v => ({
       camps: v[0],
       art: v[1],
       events: v[2],
       timestamp: new Date().valueOf()
     }))
+    .then(v => { console.info("Built data model"); return v; })
     .then(data => JSON.stringify(data))
     .catch(err => { throw err })
 }
