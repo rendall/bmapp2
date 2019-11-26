@@ -22,9 +22,11 @@ This is served via Netlify and has two components, the backend and the frontend.
 
 ### structure
 
-- `./src` contains all source. Develop here. It more or less mirrors its parent in structure
+- `./src` contains all source. Develop here. it's the only directory to be tracked in the repo
 - `./functions-src` contains intermediate compiled Netlify serverless functions
 - `./functions` contains compiled Netlify serverless functions
+- `./common` contains code that can be shared among other modules
+- `./app` is the root of the frontend, and webservers should serve this directory
 - endpoint is served from `./.netlify/functions/file-name`
 
 ### pipeline
@@ -32,9 +34,6 @@ This is served via Netlify and has two components, the backend and the frontend.
 Develop using the `.ts` files in `./src/`. After building, issue command `npm run build`
 Push to Github master, application shows up at <https://bmapp2.netlify.com/>
 
-## Known bugs
+## known bugs
 
-The request and response to the Burning Man API works as expected locally, but
-fails silently when uploaded and built in Netlify, returning a status 200 OK,
-but no data. The line before `http.get` in `api.js` executes, but nothing
-following.
+Netlify's serverless functions will not return the entire uncompressed BM json object for one year.
