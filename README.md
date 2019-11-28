@@ -36,4 +36,6 @@ Push to Github master, application shows up at <https://bmapp2.netlify.com/>
 
 ## known bugs
 
-Netlify's serverless functions will not return the entire uncompressed BM json object for one year.
+Netlify's serverless functions will not return the entire uncompressed BM
+json object because AWS Lambda functions have a practical upper limit of 4MB
+on response body size.
