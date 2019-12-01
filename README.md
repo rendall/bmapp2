@@ -20,7 +20,7 @@ This is served via Netlify and has two components, the backend and the frontend.
 - `netlify-lambda -s serve functions` : serve backend
 - visit <http://localhost:9000/.netlify/functions/data> or <http://localhost:9000/.netlify/functions/data?year=2015>
 
-### structure
+### directory structure
 
 - `./src` contains all source. Develop here. it's the only directory to be tracked in the repo
 - `./functions-src` contains intermediate compiled Netlify serverless functions
@@ -28,6 +28,16 @@ This is served via Netlify and has two components, the backend and the frontend.
 - `./common` contains code that can be shared among other modules
 - `./app` is the root of the frontend, and webservers should serve this directory
 - endpoint is served from `./.netlify/functions/file-name`
+
+### architecture
+
+- search
+- saving / local
+- UI
+- developer installation
+- PWA / user installation
+
+
 
 ### pipeline
 
