@@ -61,7 +61,9 @@ typings/
 .next
 
 # BMapp2
+/app
 /common
+/data
 /functions
 /functions-src
-/app
+/scripts
