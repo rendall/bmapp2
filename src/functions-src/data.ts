@@ -18,3 +18,6 @@ exports.handler = (event: APIGatewayEvent, context: Context, callback: Callback)
       callback(null, { statusCode: err.statusCode, body: err.statusMessage });
     });
 };
+
+// NB: This API endpoint currently bumps against AWS upper limit of 5MB body size
+// and so can only be used when served locally
