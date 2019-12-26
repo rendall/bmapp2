@@ -6,7 +6,7 @@ This is BMapp, the app to navigate Burning Man.
 
 ## development
 
-This is served via Netlify and has two components, the backend and the frontend. Backend development is current.
+This is served via Netlify and has two components, the backend and the frontend. Backend development is ongoing. Frontend development is future.
 
 ### installation
 
@@ -23,9 +23,13 @@ This is served via Netlify and has two components, the backend and the frontend.
 ### directory structure
 
 - `./src` contains all source. Develop here. it's the only directory to be tracked in the repo
+
+After build, the root directory will also have these directories:
+
 - `./functions-src` contains intermediate compiled Netlify serverless functions
 - `./functions` contains compiled Netlify serverless functions
 - `./common` contains code that can be shared among other modules
+- `./data` contains collated data from the BM API
 - `./app` is the root of the frontend, and webservers should serve this directory
 - endpoint is served from `./.netlify/functions/file-name`
 
@@ -37,8 +41,6 @@ This is served via Netlify and has two components, the backend and the frontend.
 - developer installation
 - PWA / user installation
 
-
-
 ### pipeline
 
 Develop using the `.ts` files in `./src/`. After building, issue command `npm run build`
@@ -46,6 +48,8 @@ Push to Github master, application shows up at <https://bmapp2.netlify.com/>
 
 ## known bugs
 
-Netlify's serverless functions will not return the entire uncompressed BM
-json object because AWS Lambda functions have a practical upper limit of 4MB
-on response body size.
+Netlify's serverless functions will not return the entire uncompressed BM json object because AWS Lambda functions have a practical upper limit of 4MB on response body size. They can thus only be served and used locally. To what end is yet TBD.
+
+## contributing
+
+Yes, please. I'm happy to collaborate, particularly with graphic, UI- and UX-designers. But do let me know if you fork. I have a tendency to `git push --force` unless I know that someone else is attached to the commit history.

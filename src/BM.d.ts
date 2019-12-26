@@ -1,3 +1,9 @@
+export interface BMData {
+    camps: BMCamp[];
+    art: BMArt[];
+    events: BMEvent[];
+}
+
 interface BMInfo extends Object {
     uid: string;
     name?: string | null;
@@ -7,12 +13,6 @@ interface BMInfo extends Object {
     print_description?: string;
     year: number;
     url: string | null;
-}
-
-export interface BMData {
-    camps: BMCamp[];
-    arts: BMArt[];
-    events: BMEvent[];
 }
 
 export interface BMCamp extends BMInfo {

@@ -9,7 +9,9 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.31",
     "@types/dotenv": "^6.1.1",
+    "@types/jest": "^24.0.24",
     "@types/node": "^10.14.7",
+    "jest": "^24.9.0",
     "netlify-lambda": "^1.5.1",
     "rimraf": "^2.6.3",
     "typescript": "^3.5.3"
