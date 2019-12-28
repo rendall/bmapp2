@@ -4,13 +4,15 @@
   "main": "dist/index.js",
   "license": "MIT",
   "dependencies": {
-    "dotenv": "^8.0.0"
+    "dotenv": "^8.0.0",
+    "fuse.js": "^3.4.6"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.31",
     "@types/dotenv": "^6.1.1",
     "@types/jest": "^24.0.24",
     "@types/node": "^10.14.7",
+    "http-server": "^0.12.0",
     "jest": "^24.9.0",
     "netlify-lambda": "^1.5.1",
     "rimraf": "^2.6.3",
@@ -19,6 +21,7 @@
   "scripts": {
     "build:clean": "rimraf app && rimraf common && rimraf functions",
     "build": "npm run build:clean && tsc && netlify-lambda build functions-src",
-    "serve": "netlify-lambda -s serve functions"
+    "serve:backend": "netlify-lambda -s serve functions",
+    "serve:frontend": "http-server ./app"
   }
 }
