@@ -8,7 +8,7 @@ This is BMapp, the app to navigate Burning Man.
 
 This is served via Netlify and has two components, the backend and the frontend. Backend development is ongoing. Frontend development is future.
 
-### installation
+### installation for developers
 
 - Clone the git repo
 - `npm install` : install all dependencies
@@ -45,6 +45,11 @@ After build, the root directory will also have these directories:
 
 Develop using the `.ts` files in `./src/`. After building, issue command `npm run build`
 Push to Github master, application shows up at <https://bmapp2.netlify.com/>
+
+There are two build steps:
+
+- First, compilation from Typescript into javascript (and moving files out of `./src` up one level)
+- Second, tree-shaking and bundling via webpack into `./app`
 
 ## known bugs
 
