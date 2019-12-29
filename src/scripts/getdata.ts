@@ -12,7 +12,7 @@ Examples: getdata
 import { getData } from "../common/api";
 import * as fs from "fs";
 
-const dir = `${process.cwd()}/data`.replace("\\", "/");
+const dir = `${process.cwd()}/app/data`.replace("\\", "/");
 
 /* Write BM API output to file <year>.json */
 const downloadSingleYear = (year: number) => getData(year)

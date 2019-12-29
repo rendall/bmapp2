@@ -62,8 +62,6 @@ typings/
 
 # BMapp2
 /app
-/common
-/data
 /functions
-/functions-src
 /scripts
+/src/**/*.js

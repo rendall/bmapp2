@@ -1,6 +1,6 @@
 import Fuse from "fuse.js"
 import { BMData, BMInfo } from "../BM";
-import { getType, isEmpty, isEvent } from "../common/utils";
+import { getType } from "../common/utils";
 // import { BMResultItem } from "../Search";
 
 export class SearchEngine {
