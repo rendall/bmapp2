@@ -8,10 +8,13 @@
     "fuse.js": "^3.4.6"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-typescript": "^7.7.7",
     "@types/aws-lambda": "^8.10.31",
     "@types/dotenv": "^6.1.1",
     "@types/jest": "^24.0.24",
     "@types/node": "^10.14.7",
+    "copy-webpack-plugin": "^5.1.1",
     "http-server": "^0.12.0",
     "jest": "^24.9.0",
     "netlify-lambda": "^1.5.1",
@@ -21,9 +24,15 @@
     "webpack-cli": "^3.3.10"
   },
   "scripts": {
-    "build:clean": "rimraf app && rimraf common && rimraf functions",
-    "build": "npm run build:clean && tsc && netlify-lambda build functions-src",
+    "build:clean": "rimraf app && rimraf common && rimraf scripts && rimraf functions",
+    "build": "npm run build:clean && tsc && tsc -p tsconfig.scripts.json && netlify-lambda build src/functions-src && node scripts/getdata && webpack",
     "serve:backend": "netlify-lambda -s serve functions",
     "serve:frontend": "http-server ./app"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-typescript"
+    ]
   }
 }

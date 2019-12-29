@@ -8,18 +8,19 @@ Examples: getdata
 
 [years] is optional, but must be year 2015 or later.
 */
-
 import { getData } from "../common/api";
 import * as fs from "fs";
 
 const dir = `${process.cwd()}/app/data`.replace("\\", "/");
 
 /* Write BM API output to file <year>.json */
-const downloadSingleYear = (year: number) => getData(year)
+const downloadSingleYear = (year: number) => new Promise((resolve, reject) => {
+  // first create the data directory
+  fs.mkdir(dir, { recursive: true }, (err) => err ? reject(err) : resolve());
+  // then retrieve the data
+}).then(() => getData(year))
   .then(data => {
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
+    // then write the data file into the directory
     const fileName = `${dir}/${year}.json`
     fs.writeFile(fileName, data, err => {
       if (err) throw err;

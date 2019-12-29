@@ -1,6 +1,6 @@
 import { SearchEngine } from "../search/search"
 let search: SearchEngine
-fetch("./2019.json").then(r => r.json()).then(j => {
+fetch("./data/2019.json").then(r => r.json()).then(j => {
   search = new SearchEngine(j)
 })
 

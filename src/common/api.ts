@@ -25,8 +25,8 @@ const apiPromise = (endpoint: string) => (year: number | string) => {
     const requestOptions: http.RequestOptions = { hostname, path, auth }
 
     const onResponse = (res: IncomingMessage) => {
-      console.info(`Received response for ${endpoint} ${year}`)
       const { statusCode, statusMessage } = res
+      console.info(`Received response for ${endpoint} ${year}: ${statusCode}: ${statusMessage}`)
       res.on("error", (error) => {
         console.error(`${endpoint} error`, error)
         res.resume()
@@ -34,7 +34,16 @@ const apiPromise = (endpoint: string) => (year: number | string) => {
       })
       let dump = ""
       res.on("data", data => (dump += data))
-      res.on("end", () => resolve(JSON.parse(dump)))
+      res.on("end", () => {
+        console.info(`${year} ${endpoint} dump end`);
+        try {
+          const json = JSON.parse(dump);
+          resolve(json);
+        } catch (error) {
+          console.error(`${year} ${endpoint} error:`, {error})
+
+        }
+      });
     }
 
     const request: ClientRequest = http.get(requestOptions, onResponse)
