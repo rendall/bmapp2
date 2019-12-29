@@ -16,7 +16,9 @@
     "jest": "^24.9.0",
     "netlify-lambda": "^1.5.1",
     "rimraf": "^2.6.3",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   },
   "scripts": {
     "build:clean": "rimraf app && rimraf common && rimraf functions",
