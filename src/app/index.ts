@@ -1,18 +1,18 @@
-import { getData } from "../common/api";
-import * as fs from "fs";
+import { SearchEngine } from "../search/search"
+let search: SearchEngine
+fetch("./2019.json").then(r => r.json()).then(j => {
+  search = new SearchEngine(j)
+})
 
-const YEAR = 2019;
-const dir = `${__dirname}/data`;
+const onSearchClick = (e:any) => {
+  console.log({e})
 
-getData(YEAR)
-  .then(data => {
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
-    fs.writeFile(`${dir}/${YEAR}.json`, data, err => {
-      if (err) throw err;
-      else throw "Unknown file write error";
-    });
-  })
-  .then(() => console.log("done"))
-  .catch(err => console.error(err));
+  const searchInput = document.querySelector("input[type=search]") as HTMLInputElement;
+  const searchTerm = searchInput.value;
+
+  const searchResult = search.getResultsByTerm(searchTerm)
+  console.log({ searchResult })
+
+
+}
+document.querySelector("button")!.addEventListener("click", onSearchClick)
