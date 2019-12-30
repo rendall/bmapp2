@@ -1,7 +1,6 @@
 import Fuse from "fuse.js"
 import { BMData, BMInfo } from "../BM";
 import { getType } from "../common/utils";
-// import { BMResultItem } from "../Search";
 
 export class SearchEngine {
   readonly getResultsByTerm: (term: string) => BMResultItem[];
@@ -37,12 +36,3 @@ interface BMResultItem {
     score: number;
     matches: any;
 }
-// interface FuseMatch {
-//   indices: [number, number][];
-//   key: string;
-// }
-// interface FuseResult {
-//   item: BMInfo;
-//   matches: FuseMatch[];
-//   score: number;
-// }
