@@ -39,9 +39,9 @@ interface BMCamp {
 
 After downloading the data, you may want to run the data integrity tests. This will highlight issues with the data such as events that have no location, or have ending times earlier than their start time. Yes, this will test all data throughout time. You can change that in `data.test.ts`
 
-First, compile the tests by typing `npx tsc -p tsconfig.tests.json` into the console from project root. To run the data integrity tests, type `npx jest data`. Be forewarned: it may take 5 minutes or longer for the tests to complete. The tests themselves do not take so long (~ 90s) , but currently, jest feels the need to list every single successful test with no way to output only failing tests. As there are over 100 thousand separate tests (`101743` to be exact), most of them successful, it can take awhile for all of them to output.
+First, compile the tests by typing `npx tsc -p tsconfig.tests.json` into the console from project root. To run the data integrity tests, type `npx jest data`. Be forewarned: it may take 5 minutes or longer for the tests to complete. The tests themselves do not take so long (~ 90s) , but currently, jest feels the need to list every single successful test with no way to output only failing tests. As there are over 100 thousand separate tests (`101697` to be exact), most of them successful, it can take awhile for all of them to output.
 
-Props to the Burning Man IT department though: only `337` tests fail out of those `101743` total.
+Props to the Burning Man IT department though: only `291` tests fail out of those `101697` total.
 
 You will see output similar to this:
 
