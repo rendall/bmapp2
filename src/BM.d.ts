@@ -20,7 +20,7 @@ export interface BMCamp extends BMInfo {
     contact_email: string | null;
     hometown?: string | null;
     location: BMCampLocation;
-    location_string: string;
+    location_string: string | null;
 }
 
 export interface BMCampView extends BMCamp {
@@ -28,10 +28,10 @@ export interface BMCampView extends BMCamp {
 }
 
 export interface BMCampLocation {
-    string: string;
-    frontage: string;
-    intersection: string;
-    intersection_type: string;
+    string: string | null;
+    frontage: string | null;
+    intersection: string | null;
+    intersection_type: string | null;
     dimensions: string | null;
 }
 
@@ -82,7 +82,7 @@ export interface BMEvent extends BMInfo {
     print_description: string;
     slug: string;
     hosted_by_camp: string | undefined;
-    located_at_art: string | undefined;
+    located_at_art: string | undefined | null;
     other_location: string;
     check_location: number;
     all_day: number | null;

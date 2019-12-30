@@ -61,7 +61,11 @@ typings/
 .next
 
 # BMapp2
+/RAW
 /app
+/common
+/data
 /functions
 /scripts
+/src-compiled
 /src/**/*.js
