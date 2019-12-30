@@ -119,6 +119,8 @@ With collaborators and/or as the application development matures, this will (lik
 - after testing, `development` is squashed to `master`
 - changes to `master` are automatically deployed
 
+Commit messages are generally imperative, although the starting with verbs 'Add...' or 'Change...' can be ommitted, so instead of "Add build process testing", it can be "Build process testing"
+
 ### Netlify
 
 This app is hosted for free at the almighty Netlify. I will add more about that here in time to come, but among other important points, [be sure to add environment variables](https://docs.netlify.com/configure-builds/environment-variables/) to the site. That is to say, that the `.env` file variables should be manually entered in the site dashboard.
