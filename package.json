@@ -24,8 +24,13 @@
     "webpack-cli": "^3.3.10"
   },
   "scripts": {
-    "build:clean": "rimraf app && rimraf common && rimraf scripts && rimraf functions",
-    "build": "npm run build:clean && tsc && tsc -p tsconfig.scripts.json && netlify-lambda build src/functions-src && node scripts/getdata && webpack",
+    "prebuild": "rimraf app && rimraf functions",
+    "build:scripts": "tsc -p tsconfig.scripts.json",
+    "build:functions" : "netlify-lambda build src/functions-src",
+    "build": "tsc && webpack --verbose && npm run build:functions && npm run build:scripts && node scripts/getdata",
+    "postbuild": "rimraf common && rimraf scripts && rimraf src-compiled",
+    "test:data" : "",
+    "test": "tsc && jest",
     "serve:backend": "netlify-lambda -s serve functions",
     "serve:frontend": "http-server ./app"
   },
