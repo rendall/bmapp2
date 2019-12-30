@@ -30,7 +30,7 @@
     "build": "tsc && webpack --verbose && npm run build:functions && npm run build:scripts && node scripts/getdata",
     "postbuild": "rimraf common && rimraf scripts && rimraf src-compiled",
     "test:data" : "",
-    "test": "tsc && jest",
+    "test": "tsc && tsc -p tsconfig.tests.json && jest",
     "serve:backend": "netlify-lambda -s serve functions",
     "serve:frontend": "http-server ./app"
   },
