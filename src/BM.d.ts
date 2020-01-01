@@ -106,3 +106,9 @@ export interface BMEventType {
     label: string;
     abbr: string
 }
+
+export interface BMResultItem {
+  item: BMInfo,
+  score: number;
+  matches: any;
+}

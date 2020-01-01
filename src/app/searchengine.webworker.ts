@@ -1,5 +1,5 @@
 export enum messageType {
-  data, query, results, accept
+  data = "data", query = "query", results = "results", accept = "accept", error="error"
 }
 
 export interface MessageData {
@@ -8,8 +8,8 @@ export interface MessageData {
   value?: any
 }
 
-interface ReceiveMessageEvent extends MessageEvent {
-  data:MessageData
+export interface ReceiveMessageEvent extends MessageEvent {
+  data: MessageData
 }
 
 export interface SearchEngineWorker extends Worker {
@@ -21,26 +21,13 @@ import { SearchEngine } from "../search/SearchEngine"
 
 let searchEngines: SearchEngine[] = []
 
-// const onSearchClick = (e: any) => {
-//   console.log({ e })
-//   const resultsList = document.querySelector("ul.results-list") as HTMLUListElement
-//   resultsList.innerHTML = ""
-
-//   const searchInput = document.querySelector("input[type=search]") as HTMLInputElement;
-//   const searchTerm = searchInput.value;
-
-//   const searchResult = search.getResultsByTerm(searchTerm)
-//   console.log({ searchResult })
-
-// }
 const receive = (e: ReceiveMessageEvent) => {
-  console.log("searchengine.webworker.onmessage", e)
   const data: MessageData = e.data
 
   switch (data.type) {
     case messageType.data:
       searchEngines[data.year] = new SearchEngine(data.value)
-      const message:MessageData = {
+      const message: MessageData = {
         type: messageType.accept,
         year: data.year
       }
@@ -49,18 +36,22 @@ const receive = (e: ReceiveMessageEvent) => {
 
     case messageType.query:
       const search = searchEngines[data.year]
-      if (!search) { 
-        postMessage(`unknown year ${data.year}`)
+      if (!search) {
+        postMessage({ type: messageType.error, year: data.year, value: `unknown year ${data.year}` })
         return;
       }
       const searchResult = search.getResultsByTerm(data.value)
-      postMessage(searchResult)
+      const resultsMessage: MessageData = {
+        type: messageType.results,
+        year: data.year,
+        value: searchResult
+      }
+      postMessage(resultsMessage)
 
       break
 
 
     default: console.error(`Unknown message type '${data.type}'`); break;
   }
-  postMessage("message sent")
 }
 self.onmessage = receive

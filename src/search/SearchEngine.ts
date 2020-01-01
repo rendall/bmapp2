@@ -1,5 +1,5 @@
 import Fuse from "fuse.js"
-import { BMData, BMInfo } from "../BM";
+import { BMData, BMInfo, BMResultItem } from "../BM";
 import { getType } from "../common/utils";
 
 export class SearchEngine {
@@ -31,12 +31,6 @@ export class SearchEngine {
   }
 }
 
-interface BMResultItem {
-  item: BMInfo,
-  score: number;
-  matches: any;
-
-}
 // export interface BMResultItem {
 //   uid: string;
 //   name: string;

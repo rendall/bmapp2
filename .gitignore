@@ -69,3 +69,7 @@ typings/
 /scripts
 /src-compiled
 /src/**/*.js
+
+
+# stash
+src/scripts/cleandata.ts

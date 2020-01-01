@@ -1,6 +1,7 @@
-import { messageType, SearchEngineWorker } from "./searchengine.webworker";
+import { messageType, SearchEngineWorker, ReceiveMessageEvent } from "./searchengine.webworker";
+import { BMResultItem } from "../BM";
 
-const searchEngineWorker:SearchEngineWorker = new Worker("searchengine.webworker.js");
+const searchEngineWorker: SearchEngineWorker = new Worker("searchengine.webworker.js");
 
 fetch("./data/2019.json")
   .then(r => r.json())
@@ -16,11 +17,23 @@ if (window.Worker) {
 
   searchInput.onchange = function () {
     searchEngineWorker.postMessage({ type: messageType.query, value: searchInput.value, year: 2019 });
-    console.log('Message posted to worker');
   }
 
-  searchEngineWorker.onmessage = function (e) {
-    console.log('Message received from worker', e);
+  searchEngineWorker.onmessage = function (e: ReceiveMessageEvent) {
+    console.log("received message from searchEngineWorker", e)
+
+    if (e.data.type === messageType.results) {
+
+      const resultsList = document.querySelector("ul.results-list") as HTMLUListElement
+      resultsList.innerHTML = ""
+
+      const searchResult: BMResultItem[] = e.data.value;
+      searchResult.forEach(result => {
+        const li = document.createElement("li")
+        li.innerText = `${result.item.name || result.item.title}`
+        resultsList.appendChild(li);
+      });
+    }
   }
 } else {
   console.log('Your browser does not support web workers.')
