@@ -29,8 +29,9 @@
     "build:scripts": "tsc -p tsconfig.scripts.json",
     "build:functions": "netlify-lambda build src/functions-src",
     "build:dev": "tsc && webpack --verbose",
-    "build": "tsc && webpack --verbose && npm run build:functions && npm run build:scripts && node scripts/getdata && cpx ./data/** app/data",
-    "postbuild": "rimraf common && rimraf scripts && rimraf src-compiled",
+    "copy:data": "cpx \"data/*.json\" app/data",
+    "build": "tsc && webpack --verbose && npm run build:functions && npm run build:scripts && node scripts/getdata && npm run copy:data",
+    "postbuild": "rimraf common && rimraf scripts && rimraf src-compiled && rimraf data",
     "test": "tsc && tsc -p tsconfig.tests.json && jest",
     "serve:backend": "netlify-lambda -s serve functions",
     "serve:frontend": "http-server ./app"
