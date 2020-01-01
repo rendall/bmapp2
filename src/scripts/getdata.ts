@@ -11,21 +11,18 @@ Examples: getdata
 import { getData } from "../common/api";
 import * as fs from "fs";
 
-const dir = `${process.cwd()}/app/data`.replace("\\", "/");
+const dir = `${process.cwd()}/data`.replace("\\", "/");
 
 /* Write BM API output to file <year>.json */
-const downloadSingleYear = (year: number) => new Promise((resolve, reject) => {
-  // first create the data directory
-  fs.mkdir(dir, { recursive: true }, (err) => err ? reject(err) : resolve());
-  // then retrieve the data
-}).then(() => getData(year))
-  .then(data => {
-    // then write the data file into the directory
-    const fileName = `${dir}/${year}.json`
-    fs.writeFile(fileName, data, err => {
-      if (err) throw err;
-    });
-  })
+const downloadSingleYear = (year: number) => getData(year)
+  // retrieve the data
+  .then(data =>
+    new Promise((resolve, reject) => {
+      // create the data directory
+      fs.mkdir(dir, { recursive: true }, (err) => err ? reject(err) : resolve(data));
+    }))
+  // write the data file into the directory
+  .then(data => fs.writeFile(`${dir}/${year}.json`, data, err => { if (err) throw err; }))
   .then(() => console.info(`${year}.json done`))
   .catch(err => console.error(err));
 

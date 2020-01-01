@@ -1,4 +1,4 @@
-import { BMData, BMEvent, BMCamp, BMArt } from '../../BM';
+import { BMData, BMEvent, BMCamp, BMArt } from '../BM';
 import { readFileSync } from 'fs';
 
 const isEmpty = (a: any) => a === undefined || a === null || a === "" || (a.hasOwnProperty("length") && a.length === 0);

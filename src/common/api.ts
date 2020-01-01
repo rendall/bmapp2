@@ -27,23 +27,25 @@ const apiPromise = (endpoint: string) => (year: number | string) => {
     const onResponse = (res: IncomingMessage) => {
       const { statusCode, statusMessage } = res
       console.info(`Received response for ${endpoint} ${year}: ${statusCode}: ${statusMessage}`)
+      if (!statusCode || statusCode !== 200) reject({ statusCode, statusMessage })
+
       res.on("error", (error) => {
         console.error(`${endpoint} error`, error)
         res.resume()
         reject({ statusCode, statusMessage })
       })
+
       let dump = ""
       res.on("data", data => (dump += data))
       res.on("end", () => {
-        console.info(`${year} ${endpoint} dump end`);
+        console.info(`${year} ${endpoint} dump end`)
         try {
-          const json = JSON.parse(dump);
-          resolve(json);
+          const json = JSON.parse(dump)
+          resolve(json)
         } catch (error) {
-          console.error(`${year} ${endpoint} error:`, {error})
-
+          console.error(`${year} ${endpoint} error:`, { error })
         }
-      });
+      })
     }
 
     const request: ClientRequest = http.get(requestOptions, onResponse)
@@ -54,16 +56,16 @@ const apiPromise = (endpoint: string) => (year: number | string) => {
         case "socket hang up":
           if (request.aborted) {
             reject({ statusCode: TIMEOUT_ERROR_STATUS_CODE, statusMessage: "Burning Man API timeout" })
-            break;
+            break
           }
         default:
           console.error(error)
           reject({ statusCode: 500, statusMessage: `${error.name}` })
-          break;
+          break
       }
     }
 
-    request.addListener("error", onRequestError);
+    request.addListener("error", onRequestError)
     request.setTimeout(TIMEOUT_MS, onTimeout)
 
   }).catch((err) => { throw err })

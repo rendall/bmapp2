@@ -15,6 +15,7 @@
     "@types/jest": "^24.0.24",
     "@types/node": "^10.14.7",
     "copy-webpack-plugin": "^5.1.1",
+    "cpx": "^1.5.0",
     "http-server": "^0.12.0",
     "jest": "^24.9.0",
     "netlify-lambda": "^1.5.1",
@@ -24,12 +25,12 @@
     "webpack-cli": "^3.3.10"
   },
   "scripts": {
-    "prebuild": "rimraf app && rimraf functions",
+    "prebuild": "rimraf app && rimraf functions && rimraf data",
     "build:scripts": "tsc -p tsconfig.scripts.json",
-    "build:functions" : "netlify-lambda build src/functions-src",
-    "build": "tsc && webpack --verbose && npm run build:functions && npm run build:scripts && node scripts/getdata",
+    "build:functions": "netlify-lambda build src/functions-src",
+    "build:dev": "tsc && webpack --verbose",
+    "build": "tsc && webpack --verbose && npm run build:functions && npm run build:scripts && node scripts/getdata && cpx ./data/** app/data",
     "postbuild": "rimraf common && rimraf scripts && rimraf src-compiled",
-    "test:data" : "",
     "test": "tsc && tsc -p tsconfig.tests.json && jest",
     "serve:backend": "netlify-lambda -s serve functions",
     "serve:frontend": "http-server ./app"
