@@ -2,6 +2,7 @@ export interface BMData {
     camps: BMCamp[];
     art: BMArt[];
     events: BMEvent[];
+    timestamp: number;
 }
 
 interface BMInfo extends Object {
@@ -41,7 +42,7 @@ export interface BMArt extends BMInfo {
     hometown: string | null;
     artist: string | null;
     category: string | null;
-    program: string;
+    program: string | null;
     donation_link: string | null;
     guided_tours: number;
     self_guided_tour_map: number;
@@ -81,7 +82,7 @@ export interface BMEvent extends BMInfo {
     event_type: BMEventType;
     print_description: string;
     slug: string;
-    hosted_by_camp: string | undefined;
+    hosted_by_camp: string | null;
     located_at_art: string | undefined | null;
     other_location: string;
     check_location: number;

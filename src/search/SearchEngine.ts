@@ -18,7 +18,7 @@ export class SearchEngine {
       distance: 1999,
       maxPatternLength: 32,
       minMatchCharLength: 10,
-      keys: [ { "name": "name", "weight": 0.5 }, { "name": "title", "weight": 0.5 }, { "name": "description", "weight": 0.375 }, { "name": "artist", "weight": 0.5 }, { "name": "event_type.label", "weight": 1 }, { "name": "hometown", "weight": 0.25 }, { "name": "location.string", "weight": 1 }, { "name": "type", "weight": 1 } ]
+      keys: [{ "name": "name", "weight": 0.5 }, { "name": "title", "weight": 0.5 }, { "name": "description", "weight": 0.375 }, { "name": "artist", "weight": 0.5 }, { "name": "event_type.label", "weight": 1 }, { "name": "hometown", "weight": 0.25 }, { "name": "location.string", "weight": 1 }, { "name": "type", "weight": 1 }]
     };
     const allInfo: BMInfo[] = (data.art as BMInfo[]).concat(data.camps as BMInfo[]).concat(data.events as BMInfo[]).map((i: BMInfo) => ({ ...i, type: getType(i) }));
     const allWithDescriptions = allInfo.map((i: BMInfo) => i.description === null ? ({ ...i, description: "" }) : i);
@@ -32,7 +32,19 @@ export class SearchEngine {
 }
 
 interface BMResultItem {
-    item: BMInfo,
-    score: number;
-    matches: any;
+  item: BMInfo,
+  score: number;
+  matches: any;
+
 }
+// export interface BMResultItem {
+//   uid: string;
+//   name: string;
+//   type: BMInfoType;
+//   event_type?: BMEventType;
+//   location?: BMCampLocation | BMArtLocation;
+//   matches?: ResultMatches[],
+//   score?: number,
+//   final: Date | null,
+//   xy?: [number, number]
+// }
