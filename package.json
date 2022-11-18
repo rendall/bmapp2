@@ -22,7 +22,7 @@
     "rimraf": "^2.6.3",
     "typescript": "^3.5.3",
     "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.12"
   },
   "scripts": {
     "prebuild": "rimraf app && rimraf functions && rimraf data",
